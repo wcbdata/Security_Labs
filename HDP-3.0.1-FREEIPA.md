@@ -291,9 +291,9 @@ Use case: Customer has an existing cluster which they would like you to secure f
 
 - Current setup:
   - The customer has multiple organizational groups (i.e. sales, hr, legal) which contain business users (sales1, hr1, legal1 etc) and hadoopadmin
-  - These groups and users are defined in Active Directory (AD) under its own Organizational Unit (OU) called CorpUsers 
-  - There are empty OUs created in AD to store hadoop principals/hadoop nodes (HadoopServices, HadoopNodes)
-  - Hadoopadmin user has administrative credentials with delegated control of "Create, delete, and manage user accounts" on above OUs
+  - These groups and users are defined in FreeIPA under the default container "accounts" at the root of the basedn
+  - Service principals will be created under the "services" container for Kerberos use
+  - "hadoopadmin" user has administrative credentials with delegated control of "Create, delete, and manage user accounts" on above OUs
   - Hadoop cluster running HDP has already been setup using Ambari (including HDFS, YARN, Hive, Hbase, Solr, Zookeeper)
   
 - Goals:
@@ -314,7 +314,7 @@ We will run through a series of labs and step by step, achieve all of the above 
   
 ### KDC and AD overview
 
-- Active Directory will already be setup by the instructor. A basic structure of OrganizationalUnits will have been pre-created to look something like the below:
+- FreeIPA will already be setup by the instructor. A basic structure of OrganizationalUnits will have been pre-created to look something like the below:
   - CorpUsers OU, which contains:
     - business users and groups (e.g. it1, hr1, legal1) and 
     - hadoopadmin: Admin user (for AD, Ambari, ...)
