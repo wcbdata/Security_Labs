@@ -1,14 +1,8 @@
-## FreeIPA setup
-
-### Sample script to setup FreeIPA on CentOS 7 on AWS
-
-Based on steps [here](https://www.evernote.com/client/snv?noteGuid=f7eed2f9-5255-4f7c-b0d8-ecee1dba3c9f&noteKey=d2b6e968a783fd5e&var=b&sn=https%3A%2F%2Fwww.evernote.com%2Fshard%2Fs337%2Fsh%2Ff7eed2f9-5255-4f7c-b0d8-ecee1dba3c9f%2Fd2b6e968a783fd5e&exp=ENB3538), official docs [here](https://docs.hortonworks.com/HDPDocuments/HDP3/HDP-3.0.1/authentication-with-kerberos/content/kerberos_optional_use_an_existing_ipa.html)
-
-```
+#script to setup IPAserver on Fieldcloud
 
 #set name of instance to ipa.someawsdomain
 export NAME=ipa
-export DOMAIN=us-west-2.compute.internal
+export DOMAIN=field.hortonworks.com
 export REALM=$(echo ${DOMAIN} | awk '{print toupper($0)}')
 export IP=$(ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print $2}' | cut -f1  -d'/')
 
@@ -38,18 +32,19 @@ cat /proc/sys/kernel/random/entropy_avail
 service dbus restart
 
 
-#sudo ipa-server-install \
-#--realm ${REALM} --domain ${DOMAIN} \
-#-a BadPass#1 -p BadPass#1 --unattended
-#ipa-server-install --uninstall
-
 #install IPA server
 sudo ipa-server-install \
 --realm ${REALM} --domain ${DOMAIN} \
--a BadPass#1 -p BadPass#1 \
---setup-dns \
---forwarder=8.8.8.8 --allow-zone-overlap --no-host-dns \
---auto-forwarders --auto-reverse --unattended
+-a BadPass#1 -p BadPass#1 --unattended
+ipa-server-install --uninstall
+
+
+#sudo ipa-server-install \
+#--realm ${REALM} --domain ${DOMAIN} \
+#-a BadPass#1 -p BadPass#1 \
+#--setup-dns \
+#--forwarder=8.8.8.8 --allow-zone-overlap --no-host-dns \
+#--auto-forwarders --auto-reverse --unattended
 
 
 #not needed as IPA install will do this
@@ -149,5 +144,3 @@ ipa passwd ivanna_eu_hr < tmp.txt
 ipa passwd scott_intern < tmp.txt
 
 rm -f tmp.txt
-
-```
